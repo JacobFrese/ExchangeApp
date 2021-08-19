@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Request Tool</title>
+  {% include "bootstrap.html" %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}"/>
+</head>
+<body>
+  {% include "navigation.html" %}
+  <div class="jumbotron rounded-0 bg-c-lite-grey">
+    <h1>Request Tool</h1>
+    <h5>You are requesting to rent a "{{ tool_data.title }}" from: {{ tool_data.user.username }}</h5>
+    <h7>Please select the dates you would like to request. </h7>
+    <form method="POST">
+      {% csrf_token %}
+      <table>
+        {{ form_data.as_table }}
+				<tr>
+					<td></td>
+					<td>
+						<a href="/" class="btn btn-secondary">Cancel</a>
+						<a href="/" class="btn btn-primary">Save</a>
+					</td>
+				</td></tr>
+			</table>
+    </form>
+  </div>
+</body>
+</html>

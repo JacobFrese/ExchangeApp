@@ -1,0 +1,11 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav text-center">
+      {% if user.is_authenticated %}
+      <div class="d-flex justify-content-center px-5">
+        <div class="search"> <input type="text" class="search-input" placeholder="Search..."> <a href="#" class="search-icon"> <i class="fa fa-search"></i> </a> </div>
+      </div>
+      {% endif %}
+    </ul>
+  </div>
+</nav>

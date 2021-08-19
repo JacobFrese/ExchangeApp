@@ -1,0 +1,90 @@
+<html>
+  <head>
+    {% include "bootstrap.html" %}
+    {% load static %}
+    <script src="{%static 'js/common.js' %}" /></script>
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}"/>
+  </head>
+  <body>
+    {% include "navigation.html" %}
+    <div class="jumbotron rounded-0 bg-c-lite-grey">
+      <div class= "row justify-content-around">
+        <div class="column" >
+          <h1>My Tools</h1>
+          {% if not table_data %}
+            </p>There are no tools to display.</p>
+          {% else %}
+            <div class="row">
+              {% for row in table_data %} 
+              <div class="col-sm-4"> 
+                    <div class="card" style="width: 18.75rem;">
+                    <img src="../../static/img/Framing_hammer.jpg" width="300" height="300">
+                      <div class="container">
+                        <h4><b>{{ row.title }}</b></h4>
+                        <p>{{ row.description }}</p>
+                        <p>Price Per Day: ${{ row.price}}</p>
+                        <p>Category: {{ row.category }}</p>
+                        <p>Is Tool Live: 
+                          {% if row.live %}
+                            <a class="btn btn-link" href="/toolExchange/toggle/{{ row.id }}/">Yes</a>
+                          {% else %}
+                            <a class="btn btn-link" href="/toolExchange/toggle/{{ row.id }}/">No</a>
+                          {% endif %}
+                        </p>
+                        <p> 
+                          <a class="btn btn-primary" href="/toolExchange/edit/{{ row.id }}/">Edit</a>
+                          <a class="btn btn-primary" href="#" onclick="confirmDeleteModal({{ row.id }})">Delete</a>
+                        </p>
+                      </div>
+                    </div>
+              </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <form method="GET" action="post/">
+            <input type="submit" class="btn btn-primary" value = "Post Tool">
+          </form>
+        </div>
+        <div class="column">
+          <h1>Rental Requests</h1>
+          {% if not table_data %}
+            </p>You have no rental requests.</p>
+          {% else %}
+            {% for row in table_data %}
+              <div class="col-sm-4"> 
+                    <div class="card" style="width: 18.75rem;">
+                    <img src="https://img.icons8.com/bubbles/100/000000/user.png" width="300" height="300">
+                      <div class="container">
+                        <h4><b>{{ row.title }}</b></h4>
+                        <p>Start Date: 11/11/2011  End Date: 12/12/2012</p>
+                        <p>Jon</p>
+                        <p> 
+                          <a class="btn btn-primary" href="/toolExchange/edit/{{ row.id }}/">Approve</a>
+                          <a class="btn btn-danger" href="#" onclick="confirmDeleteModal({{ row.id }})">Deny</a>
+                        </p>
+                      </div>
+                    </div>
+              </div>
+            {% endfor %}
+          {% endif %}
+        </div>
+	    </div>
+    </div>
+    <div id="deleteModal" class="modal fade" role='dialog'>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Tool</h4>
+          </div>
+          <div class="modal-body">
+            <p>Do you really want to delete this Tool?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <span id= 'deleteButton'></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

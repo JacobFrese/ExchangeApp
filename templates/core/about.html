@@ -1,0 +1,33 @@
+<html>
+<head>
+  {% include "bootstrap.html" %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}"/>
+</head>
+<body >
+  {% include "navigation.html" %}
+  <div class="jumbotron rounded-0 bg-c-lite-grey ">
+    <h1 class="f-w-600 text-center">About TEX</h1>
+    <div class="padding d-flex justify-content-center">
+      <div class="col-md-8 col-md-24">
+        <div class="card user-card-full ">
+          <div class="row m-l-0 m-r-0 bg-c-lite-green">
+            <h1> </h1>
+          </div>
+          <div class="row m-l-0 m-r-0 justify-content-center">
+            <h6 class="f-w-600">Tool Exchange</h6>
+          </div>
+          <div class="row m-l-0 m-r-0 justify-content-left">
+            <p> Do you have tools that you arent always using? Why not make some extra money with them.
+              Its as simple as posting your tools on TEX. You set your price, agree on a date and time, and get paid.
+              </p><br>
+              <p> What if my tools get damaged you ask? No need to worry, we will hold a deposit from the renter until the
+                tool is returned and you confirm the condition. We do ask both the rentee and renter take photos and document
+                the condition before and after for legal security.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <body/>
+  </html>

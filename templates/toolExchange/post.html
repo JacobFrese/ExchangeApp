@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>Post New Tool</title>
+  {% include "bootstrap.html" %}
+</head>
+  <body>
+    {% include "navigation.html" %}
+    <div class="jumbotron rounded-0 bg-c-lite-grey">
+      <h1>Post Tool</h1>
+      <form method="POST">
+        {% csrf_token %}
+        <table>
+          {{ form_data.as_table }}
+  				<tr>
+  					<td></td>
+  					<td>
+  						<a href="/toolExchange/" class="btn btn-secondary">Cancel</a>
+  						<input type="submit" class="btn btn-primary" name="post" value = "Post Tool">
+  					</td>
+  				</td></tr>
+  			</table>
+      </form>
+    </div>
+  </body>
+</html>
