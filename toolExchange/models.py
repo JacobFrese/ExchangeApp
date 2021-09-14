@@ -9,3 +9,13 @@ class tool(models.Model):
     category = models.CharField(max_length=20)
     price = models.IntegerField()
     live = models.BooleanField(default = True)
+
+    def serialize(self):
+        return {
+            "user" : {"username":self.user.username, "email":self.user.email},
+            "title" : self.title,
+            "description" : self.description,
+            "category" : self.category,
+            "price" : self.price,
+            "live" : self.live,
+        }

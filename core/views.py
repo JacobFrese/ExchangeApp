@@ -1,3 +1,5 @@
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from core.forms import  JoinForm, LoginForm, editProfileForm
@@ -6,15 +8,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from toolExchange.models import tool
 from core.models import Profile
+import json
 
 # Create your views here.
-@login_required(login_url='/login/')
+@api_view(['POST'])
 def home(request):
     table_data = tool.objects.all()
     context = {
-    "table_data": table_data,
+    "table_data": [x.serialize() for x in table_data],
     }
-    return render(request, 'core/home.html', context)
+    return Response(json.dumps(context), status=200)
 
 def about(request):
     user_data = User.objects.get(id=request.user.id)
@@ -51,37 +54,39 @@ def user_join(request):
         page_data = { "join_form": join_form }
         return render(request, 'core/join.html', page_data)
 
+if (request.method == "POST"):
+    searched = json.loads(request.body)
+    searched = searched['searched']
+    table_data = tool.objects.filter(title__contains=searched)
+    context = {
+        "searched" : searched,
+        "table_data": [x.serialize() for x in table_data],
+    }
+
+@api_view(['POST'])
 def user_login(request):
     if (request.method == 'POST'):
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            # First get the username and password supplied
-            username = login_form.cleaned_data["username"]
-            password = login_form.cleaned_data["password"]
-            # Django's built-in authentication function:
-            user = authenticate(username=username, password=password)
-            # If we have a user
-            if user:
-                #Check it the account is active
-                if user.is_active:
-                    # Log the user in.
-                    login(request,user)
-                    # Send the user back to homepage
-                    return redirect("/")
-                else:
-                    # If account is not active:
-                    return HttpResponse("Your account is not active.")
+        login_Credentials = json.loads(request.body)
+        email = searched['email'].cleaned_data
+        password = searched['password'].cleaned_data
+        # Django's built-in authentication function:
+        user = authenticate(email=email, password=password)
+        # If we have a user
+        if user:
+            #Check it the account is active
+            if user.is_active:
+                # Log the user in.
+                login(request,user)
+                # Send the user back to homepage
+                return redirect("/")
             else:
-                print("Someone tried to login and failed.")
-                print("They used username: {} and password: {}".format(username,password))
-                return render(request, 'core/login.html', {"login_form": LoginForm})
+                # If account is not active:
+                return response("Your account is not active.")
         else:
-            #Nothing has been provided for username or password.
-            return render(request, 'core/login.html', {"login_form": LoginForm})
-    else:
-        login_form = LoginForm()
-        page_data = { "login_form": login_form }
-        return render(request, 'core/login.html', page_data)
+            print("Someone tried to login and failed.")
+            print("They used username: {} and password: {}".format(username,password))
+            return Response(json.dumps(context), status=404)
+            #return render(request, 'core/login.html', {"login_form": LoginForm})
 
 @login_required(login_url='/login/')
 def user_logout(request):

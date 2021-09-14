@@ -1,9 +1,13 @@
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from toolExchange.models import tool
 from toolExchange.forms import postForm, requestForm
 from django.contrib.auth.models import User
+import json
+
 
 # Create your views here.
 @login_required(login_url='/login/')
@@ -89,7 +93,7 @@ def request(request, id):
 def toggle(request, id):
     if (request.method == "GET"):
         Tool = tool.objects.get(id=id)
-        Tool.live= not Tool.live
+        Tool.live = not Tool.live
         Tool.save()
         return redirect("/toolExchange/")
     else:
@@ -115,9 +119,26 @@ def search_category_button(request):
         searched = request.POST['Category']
         table_data = tool.objects.filter(category__contains=searched)
         context = {
-        "searched" : searched,
-        "table_data": table_data,
+            "searched" : searched,
+            "table_data": table_data,
         }
         return render(request, 'toolExchange/search_tool.html', context)
     else:
         return render(request, 'toolExchange/search_tool.html')
+
+@api_view(['POST'])
+def GetToolTest(request):
+    if (request.method == "POST"):
+        searched = json.loads(request.body)
+        searched = searched['searched']
+        table_data = tool.objects.filter(title__contains=searched)
+        context = {
+            "searched" : searched,
+            "table_data": [x.serialize() for x in table_data],
+        }
+        print(searched)
+        #return render(request, 'toolExchange/search_tool.html', context)
+        return Response(json.dumps(context), status=200)
+    else:
+        #return render(request, 'toolExchange/search_tool.html')
+        return Response(status=404)

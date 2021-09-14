@@ -35,4 +35,5 @@ urlpatterns = [
     path('toolExchange/toggle/<int:id>/', toolExchange_views.toggle),
     path('toolExchange/request/<int:id>/', toolExchange_views.request),
     path('toolExchange/edit/<int:id>/', toolExchange_views.edit),
+    path('GetToolTest/', toolExchange_views.GetToolTest),
 ]
